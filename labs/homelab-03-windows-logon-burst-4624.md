@@ -31,7 +31,7 @@ Some processes are run heavily by the computer account (e.g. AAULH5CG3125QZ9$), 
 A small number of user or tool‑related processes show up with noticeable frequency; in a real SOC these would be reviewed to confirm they are expected.
  
 
-** SOC relevance**
+**SOC relevance**
 This type of view is useful for:
 
 - Building a baseline of normal process activity for system vs. user accounts.
