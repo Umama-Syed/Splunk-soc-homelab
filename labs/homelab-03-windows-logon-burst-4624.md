@@ -4,54 +4,46 @@
 - Data source: `WinEventLog:Security`
 
 **Objective**
-Identify which processes are most frequently executed per account, in order to spot anomalies (e.g., unusual binaries or unexpected high‑volume process activity for a given account).
-
+Detect unusual bursts of Windows logon activity by identifying accounts with many successful logons in a short time window.
 
 ## Data and SPL
 **Data filters**
-- host="AAULH5CG3125QZ9"
 - source="WinEventLog:Security"
-- EventCode=4688` (process creation)
 
+- EventCode=4624` (successful logon)
 
-**Query**
-index=* host="AAULH5CG3125QZ9" source="WinEventLog:Security" EventCode=4688
+ **Query**
+index=* source="WinEventLog:Security" EventCode=4624
 
-| stats count by New_Process_Name, Account_Name
+| bin _time span=5m
 
-| where count > 5
+| stats count by _time, Account_Name, host
 
-| sort – count
+| where count >= 5
 
- 
-**High‑level results**
-Common Windows binaries such as cmd.exe, conhost.exe, svchost.exe, and various system agents appear with high counts, mostly under machine or service accounts.
+| sort _time, -count
 
-Some processes are run heavily by the computer account (e.g. AAULH5CG3125QZ9$), which is expected for system‑level activity.
-A small number of user or tool‑related processes show up with noticeable frequency; in a real SOC these would be reviewed to confirm they are expected.
- 
+ **High-level results**
+- Certain service or machine accounts log in frequently in short bursts, which is expected for background services.
+- Some user or tool-related accounts may also show periods with ≥ 5 logons in 5 minutes.
+
+In a real SOC, such bursts could indicate:
+- Misconfigured services looping authentications.
+- Automated scripts re-authenticating frequently.
+- Potential misuse or scripted access patterns that warrant review.
 
 **SOC relevance**
 
-This type of view is useful for:
+- Even in environments where failed-logon auditing (EventCode 4625) is not enabled, the same technique used for brute-force detection can be applied to successful logons to:
 
-- Building a baseline of normal process activity for system vs. user accounts.
-
-Spotting potentially suspicious behaviour, such as:
-- User accounts repeatedly launching tools that are unusual for their role.
-- Rare binaries that suddenly appear with high frequency.
-
-Supporting investigations:
-- When an alert fires on a particular process, you can quickly check who usually runs it and how often.
-In a production SOC, this could feed into:
-
-Detections that flag rare or newly‑seen New_Process_Name values.
-Rules excluding well‑known system processes while highlighting unexpected tools.
- 
+- Reveal abnormal authentication patterns.
+- Provide input for tuning SIEM rules and baselines.
+- Feed into correlation rules (e.g., bursts of logons to sensitive hosts).
 
 **What I learned**
-- How to extend a simple aggregation (stats count by Account_Name) into a two‑dimensional view (New_Process_Name + Account_Name).
-- How to use where count > N to focus on higher‑volume patterns instead of one‑off events.
-- How to interpret process frequency in the context of system accounts vs. user accounts.
-- How EventCode 4688 can support both baseline analysis and threat hunting.
+
+- How to use bin to group authentication events into fixed time windows (5 minutes).
+- How to aggregate by account and host and filter on thresholds (where count >= N).
+- How to interpret logon bursts in the context of normal vs. suspicious behaviour.
+- That the same SPL structure used for brute-force failed-logon detection can be reused on other event types (e.g. successful logons).
  
