@@ -25,8 +25,8 @@ index=* host="AAULH5CG3125QZ9" source="WinEventLog:Security" EventCode=4688
 
  
 **High‑level results**
-(Counts and names summarised / redacted.)
 Common Windows binaries such as cmd.exe, conhost.exe, svchost.exe, and various system agents appear with high counts, mostly under machine or service accounts.
+
 Some processes are run heavily by the computer account (e.g. AAULH5CG3125QZ9$), which is expected for system‑level activity.
 A small number of user or tool‑related processes show up with noticeable frequency; in a real SOC these would be reviewed to confirm they are expected.
  
@@ -35,6 +35,7 @@ A small number of user or tool‑related processes show up with noticeable frequ
 This type of view is useful for:
 
 - Building a baseline of normal process activity for system vs. user accounts.
+
 Spotting potentially suspicious behaviour, such as:
 - User accounts repeatedly launching tools that are unusual for their role.
 - Rare binaries that suddenly appear with high frequency.
