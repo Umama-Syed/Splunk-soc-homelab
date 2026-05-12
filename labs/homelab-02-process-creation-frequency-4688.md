@@ -24,7 +24,7 @@ index=* host="AAULH5CG3125QZ9" source="WinEventLog:Security" EventCode=4688
 
 | sort – count
 
-*** High‑level results***
+** High‑level results**
 
 (Counts and names summarised / redacted.)
 
@@ -33,6 +33,7 @@ Some processes are run heavily by the computer account (e.g. AAULH5CG3125QZ9$), 
 A small number of user or tool‑related processes show up with noticeable frequency; in a real SOC these would be reviewed to confirm they are expected.
  
 **SOC relevance**
+
 This type of view is useful for:
 
 - Building a baseline of normal process activity for system vs. user accounts.
@@ -49,8 +50,8 @@ In a production SOC, this could feed into:
  
 
 **What I learned**
-How to extend a simple aggregation (stats count by Account_Name) into a two‑dimensional view (New_Process_Name + Account_Name).
-How to use where count > N to focus on higher‑volume patterns instead of one‑off events.
-How to interpret process frequency in the context of system accounts vs. user accounts.
-How EventCode 4688 can support both baseline analysis and threat hunting.
+- How to extend a simple aggregation (stats count by Account_Name) into a two‑dimensional view (New_Process_Name + Account_Name).
+- How to use where count > N to focus on higher‑volume patterns instead of one‑off events.
+- How to interpret process frequency in the context of system accounts vs. user accounts.
+- How EventCode 4688 can support both baseline analysis and threat hunting.
  
