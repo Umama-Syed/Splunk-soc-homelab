@@ -16,7 +16,6 @@ Identify which processes are most frequently executed per account, in order to s
 - `EventCode=4688` (process creation)
 
  **Query**
-```spl
 index=* host="AAULH5CG3125QZ9" source="WinEventLog:Security" EventCode=4688
 
 | stats count by New_Process_Name, Account_Name
@@ -25,7 +24,7 @@ index=* host="AAULH5CG3125QZ9" source="WinEventLog:Security" EventCode=4688
 
 | sort – count
 
-** High‑level results**
+*** High‑level results***
 
 (Counts and names summarised / redacted.)
 
