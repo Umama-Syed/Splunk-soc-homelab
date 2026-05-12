@@ -32,6 +32,7 @@ A small number of user or tool‑related processes show up with noticeable frequ
  
 
 **SOC relevance**
+
 This type of view is useful for:
 
 - Building a baseline of normal process activity for system vs. user accounts.
