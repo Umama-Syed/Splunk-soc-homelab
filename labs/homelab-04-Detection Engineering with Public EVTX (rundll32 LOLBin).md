@@ -1,41 +1,48 @@
 **Environment**
 - Splunk Enterprise
-- Test index: `evtx_lab`
-- Dataset: [EVTX-ATT&CK-SAMPLES](https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES), **Execution** technique
-- File used: `Execution/exec_sysmon_1_lolbin_rundll32_openurl_FileProtocolHandler.evtx`
+- Test index: evtx_lab
+- Dataset: [EVTX-ATT&CK-SAMPLES](https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES),
+
+
+**Execution technique**
+
+- File used: Execution/exec_sysmon_1_lolbin_rundll32_openurl_FileProtocolHandler.evtx
 - Log type: Sysmon process‑creation events (Event ID 1 – Process Create)
 
  
 
 **Objective**
+
 Use a public EVTX dataset to:
 1. Import attack telemetry into Splunk.
 2. Understand how a specific ATT&CK Execution technique (rundll32 LOLBin) appears in Windows process logs.
 3. Build a reusable Splunk detection for suspicious `rundll32.exe` executions that open URLs / `FileProtocolHandler` rather than local DLLs.
 
 ## Data ingestion into Splunk
+
 1. **Create a lab index**
 In Splunk Web:
-   - `Settings → Indexes → New Index`
-   - Name: `evtx_lab`
+   - Settings → Indexes → New Index
+   - Name: evtx_lab
    - Leave defaults and save.
 
- 
-
 2. **Upload the EVTX file**
-- `Settings → Add Data → Upload → Select File`
+   
+- Settings → Add Data → Upload → Select File
    - File: `exec_sysmon_1_lolbin_rundll32_openurl_FileProtocolHandler.evtx` from the EVTX‑ATT&CK repo.
  - Click **Next** to the **Input Settings** step.
 
    - Input settings:
-- **Host:** `EVTX-RUN-1`
+     
+- **Host:** EVTX-RUN-1
 - **Source type:** auto (Sysmon / preprocess‑winevt)
-- **Index:** `evtx_lab`
+- **Index:** evtx_lab
 - Click **Review**, confirm `Index = evtx_lab`, then **Submit**.
 
  
 
 3. **Verify that events were indexed**
+   
    index=evtx_lab | stats count by source, sourcetype
 
  
@@ -48,6 +55,7 @@ T1218.011 – Signed Binary Proxy Execution: Rundll32
  
 
 **Results**
+
 The query returns a small number of events such as :
 host = EVTX-RUN-1
 User = a regular user or service account
@@ -57,6 +65,7 @@ Image = C:\Windows\System32\rundll32.exe
  
 
 **What I learned**
+
 How to import public EVTX logs into Splunk and isolate them in a dedicated index.
 How a specific ATT&CK Execution technique (rundll32 LOLBin) looks in Sysmon Process Create data.
 How to design a behavior‑based detection in SPL:
